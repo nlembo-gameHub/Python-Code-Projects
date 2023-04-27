@@ -55,7 +55,6 @@ def guessing_game():
   print(logo);
   #Variables
   player_guess = "";
-  game_over = False;
   guess_min = 1;
   guess_max = 100;
   #Intro Text
