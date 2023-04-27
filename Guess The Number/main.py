@@ -36,21 +36,25 @@ def input_handling():
   return num;
 
 #Comparison Function
-def compare(input, number):
+def compare(input, number, lives):
   if(input == number):
     print(f"\nCorrected, the answer was {number}. You win!\n")
-    return True;
+
   elif(input < number):
     print(f"\nToo low, Guess Again!");
-    return False;
+    lives -= 1;
+
   elif(input > number):
     print(f"\nToo high, Guess Again!");
-    return False;
+    lives -= 1;
+    
+  return lives;
 
 def guessing_game():
   #Main Function
   print(logo);
   #Variables
+  player_guess = "";
   game_over = False;
   guess_min = 1;
   guess_max = 100;
@@ -64,21 +68,19 @@ def guessing_game():
   answer = random_num_generator(guess_min, guess_max);
 
   #Guessing Loop
-  while not (game_over):
+  while player_guess != answer:
 
     #Player Picks Number
     print(f"You have {attempts} attempts remaining to guess the number.");
+    #Getting the player input
     player_guess = input_handling();
-  
-    game_over = compare(player_guess, answer);
-    
-    if attempts == 0:
-      game_over = True;
-    elif not game_over:
-      attempts -= 1;
+    #Comparing the player guess with the answer
+    #Using this func, we then adjust the attempts the player has left if wrong
+    attempts = compare(player_guess, answer, attempts);
 
-  if attempts <= 0:
-    print("You ran out of lives, better luck next time!");
+    if attempts <= 0:
+      print("You ran out of lives, better luck next time!\nn");
+      return;
 
 while input("Wanna Guess Numbers? Type 'y' or 'n': ").lower() == "y":
   clear();
