@@ -17,16 +17,25 @@ class Snake:
         self.create_snake()
         self.head = self.segments[0]
 
+    # Creating the Snake
     def create_snake(self):
         # For loop that creates the snake's body segments
         for position in STARTING_POSITIONS:
-            new_segment = Turtle(shape=self.shape)
-            new_segment.color(self.color)
-            new_segment.penup()
-            new_segment.goto(position)
-            self.segments.append(new_segment)
+            self.add_segment(position)
 
-    #Movement Function
+    # Adding Segments to the body
+    def add_segment(self, position):
+        new_segment = Turtle(shape=self.shape)
+        new_segment.color(self.color)
+        new_segment.penup()
+        new_segment.goto(position)
+        self.segments.append(new_segment)
+
+    # Extending the snake's body further
+    def extend(self):
+        self.add_segment(self.segments[-1].position())
+
+    # Movement Function
     def move(self):
         # Cycle through the Loop in reverse order for user movement
         # Start = len(segments)-1, Stop = 0, Step = -1

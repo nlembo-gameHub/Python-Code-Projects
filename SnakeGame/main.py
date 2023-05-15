@@ -1,12 +1,15 @@
 # Libraries and Modules
 from turtle import Screen
 from snake import Snake
+from food import Food
+from scoreboard import ScoreBoard
 import time
 
 # Screen Display Setup
 screen = Screen()
 s_width = 600
 s_height = 600
+canvas_length = s_width/2 - 20
 s_color = "black"
 s_title = "Nathan's Snake Game"
 
@@ -15,11 +18,14 @@ screen.bgcolor(s_color)
 screen.title(s_title)
 screen.tracer(0)
 
-# Snake Body Display
+# Snake Body Appearance
 snake_shape = "square"
 snake_color = "white"
 
+# Creating Objects from Snake, Food, & Scoreboard Class
 snake = Snake(s_color=snake_color, s_shape=snake_shape)
+food = Food(_distance=canvas_length)
+scoreboard = ScoreBoard(_distance=canvas_length)
 
 # Game Conditions
 game_is_on = True
@@ -45,6 +51,26 @@ while game_is_on:
     time.sleep(0.1)
 
     snake.move()
+
+    # Detect Collision with food.
+    if snake.head.distance(food) < 15:
+        food.refresh()
+        snake.extend()
+        scoreboard.increase_score()
+
+    # Detect Collision with wall.
+    if (snake.head.xcor() > canvas_length or snake.head.xcor() < -canvas_length) or \
+            (snake.head.ycor() > canvas_length or snake.head.ycor() < -canvas_length):
+        game_is_on = False
+        scoreboard.game_over()
+
+    # Detect collision with tail.
+    # If the head collides with any segment in the tail we need to trigger a game over
+    for segment in snake.segments[1:]:
+        if snake.head.distance(segment) < 10:
+            game_is_on = False
+            scoreboard.game_over()
+
 
 # Ending Code
 screen.exitonclick()
